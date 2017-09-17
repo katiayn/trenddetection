@@ -1,7 +1,7 @@
 from django.contrib.auth.models import User, Group
 from rest_framework import serializers
 
-from trenddetection.core.models import Tag, UserProfile
+from trenddetection.core.models import Tag, UserProfile, TagProfile
 
 
 class UserSerializer(serializers.HyperlinkedModelSerializer):
@@ -19,6 +19,12 @@ class GroupSerializer(serializers.HyperlinkedModelSerializer):
 class TagSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Tag
+        fields = '__all__'
+
+
+class TagProfileSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = TagProfile
         fields = '__all__'
 
 

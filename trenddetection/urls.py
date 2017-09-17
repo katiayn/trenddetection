@@ -6,6 +6,7 @@ from trenddetection.core import views
 
 router = routers.DefaultRouter()
 router.register(r'tags', views.TagViewSet)
+router.register(r'tag-profiles', views.TagProfileViewSet)
 router.register(r'user-profiles', views.UserProfileViewSet)
 router.register(r'search', views.SearchNewsViewSet, base_name='search')
 
