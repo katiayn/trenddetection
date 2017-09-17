@@ -1,5 +1,6 @@
 import requests
 from django.contrib.auth.models import User, Group
+from pytrends.request import TrendReq
 from rest_framework import viewsets, permissions
 from rest_framework.response import Response
 
@@ -67,16 +68,23 @@ class SearchNewsViewSet(viewsets.ViewSet):
         return current_site.domain
 
     def _get_news(self, topic, token):
+        fulltext = ''
+        for t in topic.split(' '):
+            fulltext = '{} {} AND'.format(fulltext, t)
+
+        import re
+        fulltext = re.sub(' AND$', '', fulltext)
+
         r = requests.get(
             'http://rmb.reuters.com/rmd/rest/json/search'
-            '?q=headline:{}&fragmentLength=20&maxAge=30D&token={}'.format(
-                topic,
+            '?q=fulltext:{}&fragmentLength=4&maxAge=30D&token={}'.format(
+                fulltext,
                 token)
         )
         if r.status_code == 200:
             return r.json()['results']
         else:
-            return None
+            return {}
 
     def _get_item(self, id, token):
         r = requests.get(
@@ -95,11 +103,12 @@ class SearchNewsViewSet(viewsets.ViewSet):
 
     def list(self, request):
         topics = request.GET.getlist('topics', [])
-        location = request.GET.get('location')
+        # location = request.GET.get('location')
         profile, _ = UserProfile.objects.get_or_create(user=request.user)
         token = self._get_token()
 
-        news = {}
+        news, response = {}, {}
+
         for topic in topics:
             tag, _ = Tag.objects.get_or_create(name=topic)
             tag_profiles = TagProfile.objects.filter(tag__name=tag.name)
@@ -117,17 +126,25 @@ class SearchNewsViewSet(viewsets.ViewSet):
                         profile.preferences.add(tag_profile)
                         print('{} {}'.format(tag_profile.tag.name, tag_profile.value))
             # TODO: call Google API
-            # TODO: Call Reuters
-            news = self._get_news(topic, token)
 
-            response = {}
-            count = 0
-            for item in news['result']:
-                response['item_{}'.format(count)] = self._get_item(item['id'], token)
-                count = count + 1
-                if count == 5:
-                    break
+            # Call Reuters
+            news.update(self._get_news(topic, token))
 
-        # TODO: Call trends
+
+        # Call trends
+        pytrend = TrendReq()
+        trending_searches_df = pytrend.trending_searches()
+        if list(trending_searches_df.title.values):
+            for trend in trending_searches_df.title.values[:3]:
+                # Call Reuters
+                news.update(self._get_news(trend, token))
+
+
+        count = 0
+        for item in news['result']:
+            response['item_{}'.format(count)] = self._get_item(item['id'], token)
+            count = count + 1
+            if count == 11:
+                break
 
         return Response(response)
