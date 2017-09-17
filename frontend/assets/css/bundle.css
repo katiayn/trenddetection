@@ -1,0 +1,111 @@
+[class*="col-"].center {
+  margin-right: auto !important;
+  margin-left: auto !important;
+  float: none; }
+
+body {
+  background: #333333; }
+
+a {
+  color: #000000;
+  -webkit-transition: all 0.25s linear;
+  transition: all 0.25s linear; }
+  a:hover, a:active {
+    color: #E57F00;
+    text-decoration: none; }
+
+p:last-child {
+  margin: 0; }
+
+.btn-primary {
+  border-color: #E57F00;
+  background-color: #E57F00; }
+  .btn-primary:hover {
+    border-color: #656565;
+    background-color: #656565; }
+
+.intro-section {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  width: 100vw;
+  height: 100vh;
+  -webkit-animation: reduceHeader 1s 1s forwards;
+          animation: reduceHeader 1s 1s forwards; }
+  .intro-section img {
+    max-width: 100%;
+    max-height: 100%;
+    height: auto; }
+
+.form-section form {
+  width: 100%; }
+  .form-section form input {
+    width: 100%; }
+    .form-section form input.error {
+      border-color: #FF0000; }
+  .form-section form .submit-container {
+    text-align: center; }
+
+.results-section .card-container {
+  opacity: 0;
+  margin-bottom: 50px;
+  -webkit-animation: showCard 1s 1s forwards;
+          animation: showCard 1s 1s forwards; }
+
+.results-section .custom-card {
+  background: #FFFFFF; }
+  .results-section .custom-card .header {
+    height: 200px;
+    background-size: cover;
+    font-weight: 700; }
+  .results-section .custom-card .body {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+        -ms-flex-direction: column;
+            flex-direction: column;
+    -webkit-box-pack: center;
+        -ms-flex-pack: center;
+            justify-content: center;
+    -webkit-box-align: center;
+        -ms-flex-align: center;
+            align-items: center;
+    min-height: 75px; }
+
+@-webkit-keyframes reduceHeader {
+  0% {
+    height: 100vh; }
+  100% {
+    height: 50vh; } }
+
+@keyframes reduceHeader {
+  0% {
+    height: 100vh; }
+  100% {
+    height: 50vh; } }
+
+@-webkit-keyframes showCard {
+  0% {
+    opacity: 0; }
+  100% {
+    opacity: 1; } }
+
+@keyframes showCard {
+  0% {
+    opacity: 0; }
+  100% {
+    opacity: 1; } }
+
+/*# sourceMappingURL=bundle.css.map*/
